@@ -9,6 +9,12 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap"
+      rel="stylesheet"
+    />
 
     <title>Lecteur audio</title>
   </head>
@@ -17,6 +23,11 @@
       <h2 class="titre">Titre</h2>
       <div class="image_music"></div>
       <div class="time"></div>
+      <div class="control">
+        <i class="fas fa-random random"></i>
+        <i class="fas fa-undo restart"></i>
+      </div>
+
       <div class="prog">
         <div class="prog_avant" draggable="false"></div>
         <div class="prog_rond"></div>
@@ -28,6 +39,17 @@
           <span class="pause"><i class="fas fa-play"></i></span>
           <span class="apres"><i class="fas fa-forward"></i></span>
         </div>
+      </div>
+      <div class="volume">
+        <div class="change_volume">
+          <div class="change_volume_bar">
+            <div class="change_volume_bar_avant" draggable="false"></div>
+            <div class="change_volume_bar_rond"></div>
+          </div>
+        </div>
+        <i class="fas fa-volume-up volume_actif"></i>
+        <i class="fas fa-volume-down"></i>
+        <i class="fas fa-volume-mute"></i>
       </div>
     </div>
     <script src="app.js"></script>

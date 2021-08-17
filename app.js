@@ -30,9 +30,7 @@ const listSong = [
     }
 ]
 
-/*
-*   Systeme AUDIO
-*/
+/***************************** Systeme AUDIO *****************************/
 
 let song_Playing = false;
 
@@ -115,9 +113,9 @@ function apresSong(){
 
 apres.addEventListener('click', apresSong);
 
-/*
-*   Progresse bar
-*/
+
+/***************************** Progresse bar *****************************/
+
 
 audio.addEventListener('timeupdate', () => {
     let distance = audio.currentTime * 100 / audio.duration;
@@ -137,6 +135,9 @@ audio.addEventListener('timeupdate', () => {
     time.textContent = `${heures}h ${minutes}m ${seconds}s / ${total_heures}h ${total_minutes}m ${total_seconds}s`;
 
     if(audio.duration == audio.currentTime){
+        if(random_value){
+            i = getRandomInt(0, listSong.length);
+        }
         apresSong()
     }
 })
@@ -144,7 +145,7 @@ audio.addEventListener('timeupdate', () => {
 prog_font.addEventListener('click', (event) => {
     let distance = event.clientX - (container.offsetLeft + prog_font.offsetLeft);
     distance = distance * 100 / prog_font.offsetWidth
-    console.log(distance)
+    
     prog_rond.style.left = `${distance}%`;
     prog_avant.style.width = `${distance}%`;
 
@@ -159,12 +160,12 @@ prog_rond.addEventListener('mousedown', (e)=>{
 container.addEventListener('mousemove', event => {
     if(mouseDown == true){
         let distance = event.clientX - (container.offsetLeft + prog_font.offsetLeft);
-        distance = distance * 100 / prog_font.offsetWidth
+        distance = distance * 100 / prog_font.offsetWidth;
 
         if(distance < 0){
             distance = 0;
         }else if(distance > 99){
-            distance = 99
+            distance = 99;
         }
 
         prog_rond.style.left = `${distance}%`;
@@ -178,3 +179,99 @@ document.querySelector('body').addEventListener('mouseup', e => {
     mouseDown = false;
     prog_rond.style.cursor = 'grab';
 });
+
+const random = document.querySelector('.random');
+const volume = document.querySelector('.volume');
+const restart = document.querySelector('.restart');
+const change_volume = document.querySelector('.change_volume');
+const change_volume_bar = document.querySelector('.change_volume_bar');
+const change_volume_bar_avant = document.querySelector('.change_volume_bar_avant');
+const change_volume_bar_rond = document.querySelector('.change_volume_bar_rond');
+const volume_actif = document.querySelector('.volume_actif');
+
+var mouseDown_volume = false;
+
+var random_value = false;
+
+random.addEventListener('click', () => {
+    random.classList.toggle('actif');
+    if(random_value){
+        random_value = false;
+    }else{
+        random_value = true;
+    }
+})
+
+restart.addEventListener('click', () => {
+    audio.currentTime = 0;
+})
+
+volume_actif.addEventListener('click', () =>{
+    if(change_volume.style.opacity == 0){
+        change_volume.style.opacity = 1;
+    }else{
+        change_volume.style.opacity = 0;
+    }
+    updateSoundIcon();
+})
+
+change_volume_bar.addEventListener('click', (event) => {
+    let distance = event.clientY - (container.offsetTop + change_volume_bar.offsetTop + change_volume.offsetTop + volume.offsetTop);
+    distance = distance * 100 / change_volume_bar.offsetHeight;
+    
+    change_volume_bar_rond.style.top = `${distance}%`;
+    change_volume_bar_avant.style.height = `${100 - distance}%`;
+    change_volume_bar_avant.style.top = `${distance}%`;
+
+    audio.volume = (100 - distance) / 100;
+    updateSoundIcon();
+})
+
+change_volume_bar_rond.addEventListener('mousedown', (e)=>{
+    mouseDown_volume = true;
+    change_volume_bar_rond.style.cursor = 'grabbing';
+})
+
+container.addEventListener('mousemove', event => {
+    if(mouseDown_volume == true){
+        let distance = event.clientY - (container.offsetTop + change_volume_bar.offsetTop + change_volume.offsetTop + volume.offsetTop);
+        distance = distance * 100 / change_volume_bar.offsetHeight;
+
+        if(distance < 0){
+            distance = 0;
+        }else if(distance > 100){
+            distance = 100;
+        }
+
+        change_volume_bar_rond.style.top = `${distance}%`;
+        change_volume_bar_avant.style.height = `${100 - distance}%`;
+        change_volume_bar_avant.style.top = `${distance}%`;
+    
+        audio.volume = (100 - distance) / 100;
+        updateSoundIcon();
+    }
+});
+
+document.querySelector('body').addEventListener('mouseup', e => {
+    mouseDown_volume = false;
+    change_volume_bar_rond.style.cursor = 'grab';
+});
+
+
+function updateSoundIcon(){
+    if(parseInt(change_volume_bar_rond.offsetTop) > 0){
+        volume_actif.className = `fas fa-volume-up volume_actif`;
+    }
+    if(parseInt(change_volume_bar_rond.offsetTop) > 50){
+        volume_actif.className = `fas fa-volume-down volume_actif`;
+    }
+    if(parseInt(change_volume_bar_rond.offsetTop) >= 100){
+        volume_actif.className = `fas fa-volume-mute volume_actif`;
+    }
+}
+
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min;
+}
