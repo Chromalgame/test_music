@@ -142,7 +142,9 @@ audio.addEventListener('timeupdate', () => {
 })
 
 prog_font.addEventListener('click', (event) => {
-    let distance = Math.floor(event.offsetX * 100/ prog_font.offsetWidth);
+    let distance = event.clientX - (container.offsetLeft + prog_font.offsetLeft);
+    distance = distance * 100 / prog_font.offsetWidth
+    console.log(distance)
     prog_rond.style.left = `${distance}%`;
     prog_avant.style.width = `${distance}%`;
 
@@ -154,27 +156,25 @@ prog_rond.addEventListener('mousedown', (e)=>{
     prog_rond.style.cursor = 'grabbing';
 })
 
-// prog_rond.addEventListener('mousemove', event => {
-//     if(mouseDown == true){
-//         console.log(event.offsetX)
-        // console.log(container.offsetLeft)
-        // console.log(container.offsetWidth)
+container.addEventListener('mousemove', event => {
+    if(mouseDown == true){
+        let distance = event.clientX - (container.offsetLeft + prog_font.offsetLeft);
+        distance = distance * 100 / prog_font.offsetWidth
 
-        // console.log(prog_font.offsetLeft)
-        // console.log(prog_font.offsetWidth)
+        if(distance < 0){
+            distance = 0;
+        }else if(distance > 99){
+            distance = 99
+        }
 
-//         console.log(prog_font.offsetLeft + container.offsetLeft)
+        prog_rond.style.left = `${distance}%`;
+        prog_avant.style.width = `${distance}%`;
 
-//         console.log(event.offsetX - prog_font.offsetLeft - container.offsetLeft)
+        audio.currentTime = distance * audio.duration / 100;
+    }
+});
 
-
-//         let distance = event.offsetX * 100 / prog_font.offsetWidth;
-//         prog_rond.style.left = `${distance}%`;
-//         prog_avant.style.width = `${distance}%`;
-//     }
-// });
-
-container.addEventListener('mouseup', e => {
+document.querySelector('body').addEventListener('mouseup', e => {
     mouseDown = false;
     prog_rond.style.cursor = 'grab';
 });

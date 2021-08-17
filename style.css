@@ -9,12 +9,13 @@ body {
     height: 100vh;
     background: #f1f1f1;
     user-select: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .container {
     position: absolute;
-    top: 50%;
-    left: 50%;
     width: 600px;
     height: 750px;
     background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
@@ -24,10 +25,6 @@ body {
                 -10px -10px 10px rgba(0, 0, 0, 0.1),
                 10px 0px 10px rgba(0, 0, 0, 0.1),
                 0px 10px 10px rgba(0, 0, 0, 0.1);
-
-
-
-    transform: translate(-50%, -55%);
 }
 
 .titre {
